@@ -3,6 +3,7 @@ public class Cursor {
     private int y =0;
     private int maxX;
     private int maxY;
+    private boolean showCursor = true;
 
     public Cursor(int maxX, int maxY, int x, int y ) {
         this.x = x;
@@ -27,6 +28,7 @@ public class Cursor {
         if(y>maxY){
             y = maxY;
         }
+        setShowCursor(true);
     }
     public void moveUp(){
         y--;
@@ -53,5 +55,21 @@ public class Cursor {
     public void setY(int y) {
         this.y = y;
         makeValidPosition();
+    }
+
+    public int getX() {
+        return x;
+    }
+
+    public int getY() {
+        return y;
+    }
+
+    public boolean isShowCursor() {
+        return showCursor;
+    }
+
+    public void setShowCursor(boolean showCursor) {
+        this.showCursor = showCursor;
     }
 }

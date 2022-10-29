@@ -1,3 +1,5 @@
+import java.awt.event.InputEvent;
+
 public class Cell {
     enum Type{
         BOMB,
@@ -7,6 +9,7 @@ public class Cell {
     private int value;
     private Type type;
     private boolean visible = false;
+    private boolean flagged = false;
 
     public Cell(Type type) {
         this.type = type;
@@ -38,5 +41,13 @@ public class Cell {
 
     public boolean isVisible() {
         return visible;
+    }
+
+    public boolean isFlagged() {
+        return flagged;
+    }
+
+    public void setFlagged(boolean flagged) {
+        this.flagged = flagged;
     }
 }
