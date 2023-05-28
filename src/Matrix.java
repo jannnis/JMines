@@ -6,6 +6,11 @@ public class Matrix {
     private int width;
     public Matrix(int width, int height, int amountOfBombs) throws TooManyBombsException {
         cells = new Cell[height][width];
+        for (int i = 0; i < height; i++) {
+            for (int j = 0; j < width; j++) {
+                cells[i][j] = new Cell();
+            }
+        }
         this.width = width;
         this.height = height;
         generateBombs(amountOfBombs);
@@ -24,7 +29,7 @@ public class Matrix {
         positions.remove(0);
         positions.remove(0);
 
-        for (int i = 0; i < positions.size(); i++)
+        for (int i = 0; i < amount; i++)
         {
             int index = (int)(Math.random() * positions.size());
             setBombFormPosition(positions.get(index));
@@ -45,8 +50,8 @@ public class Matrix {
     }
     public int countNeighbouringBombs(int x, int y){
         int n = 0;
-        for (int i = x-1; i < x+1; i++) {
-            for (int j = y-1; j < y+1; j++) {
+        for (int i = x-1; i < x+2; i++) {
+            for (int j = y-1; j < y+2; j++) {
                 Cell c = getCell(i,j);
                 if (c.getType()== Cell.Type.BOMB){
                     n++;
@@ -57,7 +62,7 @@ public class Matrix {
         return n;
     }
     public void checkBombAmount(int amount) throws TooManyBombsException {
-        if(getCellAmount()-4 >= amount){
+        if(getCellAmount()-4 < amount){
             throw new TooManyBombsException();
         }
     }
@@ -65,9 +70,9 @@ public class Matrix {
         return width*height;
     }
     public void setBombFormPosition(int position){
-        int collumn = position%width;
+        int column = position%width;
         int row = (int)position/width;
-        cells[row][collumn].setType(Cell.Type.BOMB);
+        cells[row][column].setType(Cell.Type.BOMB);
     }
     public Cell getCell(int x, int y){
         if(isValidX(x)&&isValidY(y)){

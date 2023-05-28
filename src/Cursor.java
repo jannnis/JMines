@@ -22,11 +22,11 @@ public class Cursor {
         if(y<0){
             y = 0;
         }
-        if(this.x>maxX){
-            x = maxX;
+        if(this.x>=maxX){
+            x = maxX-1;
         }
-        if(y>maxY){
-            y = maxY;
+        if(y>=maxY){
+            y = maxY-1;
         }
         setShowCursor(true);
     }

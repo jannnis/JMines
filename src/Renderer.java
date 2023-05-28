@@ -1,3 +1,6 @@
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+
 public class Renderer {
     private Matrix matrix;
     private Cursor cursor;
@@ -12,9 +15,6 @@ public class Renderer {
         }
         if(cursor.isShowCursor()){
             lines = renderCursor(lines);
-            cursor.setShowCursor(false);
-        }else {
-            cursor.setShowCursor(true);
         }
         return LinesToString(lines);
     }
@@ -40,7 +40,7 @@ public class Renderer {
                 return String.valueOf(cell.getValue());
             }
             if(cell.getType()== Cell.Type.BOMB){
-                return "BOMB";
+                return "B";
             }
         }
         return  "▓";
