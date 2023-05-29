@@ -4,6 +4,23 @@ public class Matrix {
     private Cell[][] cells;
     private int height;
     private int width;
+    private int bombAmount;
+    private int flagAmount = 0;
+
+    public int getFlagAmount() {
+        return flagAmount;
+    }
+    private void increaseFlagAmount(){
+        flagAmount++;
+    }
+    public int getBombAmount() {
+        return bombAmount;
+    }
+
+    public Cell[][] getCells() {
+        return cells;
+    }
+
     public Matrix(int width, int height, int amountOfBombs) throws TooManyBombsException {
         cells = new Cell[height][width];
         for (int i = 0; i < height; i++) {

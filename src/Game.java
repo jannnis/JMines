@@ -10,17 +10,37 @@ public class Game {
     private int height;
     private int width;
     private int amountOfBombs;
+    private WinChecker winchecker;
     public Game(int height, int width, int amountOfBombs) {
         this.height = height;
         this.width = width;
         this.amountOfBombs = amountOfBombs;
+
     }
     public void start() throws TooManyBombsException {
         cursor = new Cursor(width,height);
         matrix = new Matrix(width,height,amountOfBombs);
         renderer = new Renderer(matrix,cursor);
+        winchecker = new WinChecker(matrix);
         listenToKeys();
 
+    }
+    private void checkWin(){
+        if(winchecker.check()){
+            win();
+        }
+    }
+    private void win(){
+
+
+        try {
+            GlobalScreen.unregisterNativeHook();
+        } catch (NativeHookException e) {
+            throw new RuntimeException(e);
+        }
+        clearScreen();
+        new GameFin().win();
+        System.out.println("you won!");
     }
     private void listenToKeys(){
         try {
@@ -78,7 +98,12 @@ public class Game {
         openCell(x,y);
     }
     private void mark(){
-
+        int x = cursor.getX();
+        int y = cursor.getY();
+        if (matrix.getBombAmount()>=matrix.getFlagAmount()){
+            matrix.getCell(x,y).setFlagged(true);
+        }
+        checkWin();
     }
     private void openCell(int x, int y){
         Cell c;
@@ -103,18 +128,20 @@ public class Game {
             }
 
         }
+        checkWin();
     }
     private void lose(){
         //show lose screen
 
-        System.out.println("you lost!");
+
         try {
             GlobalScreen.unregisterNativeHook();
         } catch (NativeHookException e) {
             throw new RuntimeException(e);
         }
         clearScreen();
-        new GameLost();
+        new GameFin().lose();
+        System.out.println("you lost!");
     }
     public void displayFrame(){
         clearScreen();
