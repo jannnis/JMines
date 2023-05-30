@@ -15,6 +15,7 @@ public class Game {
     private int width;
     private int amountOfBombs;
     private WinChecker winchecker;
+    private Stopwatch stopwatch = new Stopwatch();
 
     public Game(int height, int width, int amountOfBombs) {
         this.height = height;
@@ -27,8 +28,10 @@ public class Game {
         matrix = new Matrix(width,height,amountOfBombs);
         renderer = new Renderer(matrix,cursor);
         winchecker = new WinChecker(matrix);
+        stopwatch.start();
         listenToKeys();
 
+        displayFrame();
     }
     private void checkWin(){
         if(winchecker.check()){
@@ -73,10 +76,12 @@ public class Game {
                 "                                                                                                                                     \n" +
                 "                                                                                                                                     "
         );
+        new Scanner(System.in).nextLine(); //fixes some weird behaviour
         Scanner scanner = new Scanner(System.in);
         System.out.println("Please enter your name to save the score:");
         String input = scanner.nextLine();
         System.out.println(input);
+        new ScoreHandler().newScore(input,stopwatch.stop());
         showQuestion();
     }
     private void listenToKeys(){
@@ -216,11 +221,14 @@ public class Game {
         System.out.println(renderer.renderFrame());
     }
     public void clearScreen(){
-
-        System.out.print("\033[H\033[2J");
-        System.out.flush();
+        ScreenCleaner.clearConsole();
     }
     private void showQuestion() {
+        try {
+            Thread.sleep(100);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
 
         Scanner scanner = new Scanner(System.in);
         System.out.println("Enter r to restart, m for the main menu or q to quit");

@@ -8,8 +8,9 @@ public class Entry implements Comparable<Entry> {
     }
     @Override
     public String toString(){
-
-        return null;
+        String out;
+        out = getName()+": "+TimeFormatter.formatDuration(getDuration());
+        return out;
     }
 
     public String getName() {

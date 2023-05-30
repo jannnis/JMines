@@ -1,13 +1,16 @@
 public class Stopwatch {
     private long start;
 
+    public Stopwatch() {
+    }
+
     public void start() {
         start = System.currentTimeMillis();
     }
 
-    public long stop() {
+    public int stop() {
         long elapsedMillis = System.currentTimeMillis() - start;
         start = 0;
-        return elapsedMillis / 1000;
+        return (int) (elapsedMillis / 1000);
     }
 }
