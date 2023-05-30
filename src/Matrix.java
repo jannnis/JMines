@@ -8,10 +8,14 @@ public class Matrix {
     private int flagAmount = 0;
 
     public int getFlagAmount() {
+        System.out.println(flagAmount);
         return flagAmount;
     }
-    private void increaseFlagAmount(){
+    public void increaseFlagAmount(){
         flagAmount++;
+    }
+    public void decreaseFlagAmount(){
+        flagAmount--;
     }
     public int getBombAmount() {
         return bombAmount;
@@ -22,6 +26,7 @@ public class Matrix {
     }
 
     public Matrix(int width, int height, int amountOfBombs) throws TooManyBombsException {
+        this.bombAmount = amountOfBombs;
         cells = new Cell[height][width];
         for (int i = 0; i < height; i++) {
             for (int j = 0; j < width; j++) {
