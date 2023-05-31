@@ -25,6 +25,7 @@ public class ScoreHandler {
         csvHandler.saveEntries();
     }
     public String highscoreList(int numberOfEntries){
+        csvHandler.readEntries();
         String out = "";
         List<Entry> entries = csvHandler.getLowestEntries(numberOfEntries);
         for (Entry entry : entries) {

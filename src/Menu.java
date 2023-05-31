@@ -2,6 +2,7 @@ import java.util.Scanner;
 
 public class Menu {
     public static void chooseOption(){
+        ScreenCleaner.clearConsole();
         Scanner scanner = new Scanner(System.in);
         System.out.println("Welcome to Minesweeper");
         System.out.println();
@@ -49,18 +50,18 @@ public class Menu {
                 customGame();
                 break;
             case "h":
-                //start Highscore screen
+                Highscore.showHighscores();
                 break;
             case "q":
                 System.exit(0);
                 break;
             default:
-                ScreenCleaner.clearConsole();
                 Menu.chooseOption();
         }
 
     }
     public static void customGame(){
+        ScreenCleaner.clearConsole();
         System.out.println("Please enter the height of the game");
         int height = saveIntInput();
         System.out.println("Please enter the width of the game");
