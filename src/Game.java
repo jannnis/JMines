@@ -1,7 +1,5 @@
 import com.github.kwhat.jnativehook.GlobalScreen;
 import com.github.kwhat.jnativehook.NativeHookException;
-import com.github.kwhat.jnativehook.keyboard.NativeKeyEvent;
-import com.github.kwhat.jnativehook.keyboard.NativeKeyListener;
 
 import java.util.Scanner;
 
@@ -119,7 +117,7 @@ public class Game {
         new ScoreHandler().newScore(input, stopwatch.stop());
 
         // Show a question or a menu after the game ends
-        showQuestion();
+        gameOverMenu();
     }
     // Method to get the current renderer
     public Renderer getRenderer() {
@@ -258,7 +256,7 @@ public class Game {
         scanner.nextLine();
 
         // Show a question or a menu after the game ends
-        showQuestion();
+        gameOverMenu();
     }
     // This method displays the current state of the game
     public void displayFrame(){
@@ -279,7 +277,7 @@ public class Game {
     }
 
     // This method prompts the user with a menu after the game ends
-    private void showQuestion() {
+    private void gameOverMenu() {
         // Clear the console screen
         clearScreen();
 
@@ -307,7 +305,7 @@ public class Game {
             exit(0);
         } else {
             // If the user enters anything else, show the question again
-            showQuestion();
+            gameOverMenu();
         }
     }
 
