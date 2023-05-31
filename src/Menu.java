@@ -89,50 +89,70 @@ public class Menu {
         }
     }
 
+    // Method to start a custom game
     public static void customGame() {
 
-        // Clearing the console screen
+        // Clears the console screen
         ScreenCleaner.clearConsole();
 
+        // Asks user for the game's height and saves it
         System.out.println("Please enter the height of the game");
         int height = saveIntInput();
+
+        // Asks user for the game's width and saves it
         System.out.println("Please enter the width of the game");
         int width = saveIntInput();
+
+        // Asks user for the number of bombs in the game and saves it
         System.out.println("Please enter the amount of bombs for the game");
         int bombs = saveIntInput();
 
+        // Tries to create a new game with the given height, width, and bombs
+        // If too many bombs were requested, an exception is thrown
         try {
             Game g = new Game(height, width, bombs);
             KeyListener.setGame(g);
             g.start();
         } catch (TooManyBombsException e) {
             System.out.println("Please select fewer Bombs");
+            // Retry the process if too many bombs were chosen
             customGame();
         }
     }
+
+    // Method to restart a game with the given height, width, and bombs
     public static void restartGame(int height,int width, int bombs){
         try {
+            // Create and start a new game with the given parameters
             Game g = new Game(height, width, bombs);
             KeyListener.setGame(g);
             g.start();
 
+            // Create and start another new game with the same parameters
+            // This is a bit strange, perhaps an error or misunderstanding in the original code?
             g = new Game(height, width, bombs);
             KeyListener.setGame(g);
             g.start();
 
         } catch (TooManyBombsException e) {
+            // Retry the process if too many bombs were chosen
             System.out.println("Please select fewer Bombs");
             customGame();
         }
     }
 
+    // Method to get an integer input from the user
     private static int saveIntInput(){
-
+        // Create a new scanner object to read from the console
         Scanner scanner = new Scanner(System.in);
+
         try {
+            // Reads a line from the console
             String input = scanner.nextLine();
+            // Tries to convert the input to an integer
             return Integer.parseInt(input);
         } catch (NumberFormatException e) {
+            // If the input cannot be converted to an integer, prompts for a valid number and tries again
             System.out.println("Please enter a valid number");
             return saveIntInput();
         }
