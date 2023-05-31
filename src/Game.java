@@ -15,23 +15,24 @@ public class Game {
     private int width;
     private int amountOfBombs;
     private WinChecker winchecker;
+    private boolean started = false;
     private Stopwatch stopwatch = new Stopwatch();
 
-    public Game(int height, int width, int amountOfBombs) {
+    public Game(int height, int width, int amountOfBombs) throws TooManyBombsException {
         this.height = height;
         this.width = width;
         this.amountOfBombs = amountOfBombs;
-
-    }
-    public void start() throws TooManyBombsException {
         cursor = new Cursor(width,height);
         matrix = new Matrix(width,height,amountOfBombs);
         renderer = new Renderer(matrix,cursor);
         winchecker = new WinChecker(matrix);
-        stopwatch.start();
-        listenToKeys();
 
+    }
+    public void start() {
+        stopwatch.start();
         displayFrame();
+
+        started = true;
     }
     private void checkWin(){
         if(winchecker.check()){
@@ -47,7 +48,7 @@ public class Game {
         }
     }
     private void win(){
-        System.out.println("you won!");
+        KeyListener.setRunning(false);
         clearScreen();
 
         System.out.println("                                                                                                                                     \n" +
@@ -76,6 +77,7 @@ public class Game {
                 "                                                                                                                                     \n" +
                 "                                                                                                                                     "
         );
+
         new Scanner(System.in).nextLine(); //fixes some weird behaviour
         Scanner scanner = new Scanner(System.in);
         System.out.println("Please enter your name to save the score:");
@@ -84,63 +86,31 @@ public class Game {
         new ScoreHandler().newScore(input,stopwatch.stop());
         showQuestion();
     }
-    private void listenToKeys(){
-        try {
-            GlobalScreen.registerNativeHook();
-            GlobalScreen.addNativeKeyListener(new NativeKeyListener() {
-                @Override
-                public void nativeKeyTyped(NativeKeyEvent nativeEvent) {
-                }
 
-                @Override
-                public void nativeKeyReleased(NativeKeyEvent nativeEvent) {
-                }
+    public Renderer getRenderer() {
+        return renderer;
+    }
 
-                @Override
-                public void nativeKeyPressed(NativeKeyEvent nativeEvent) {
-                    switch (nativeEvent.getKeyCode()){
-                        case 17:
-                        case 57416:
-                            cursor.moveUp();
-                            break;
-                        case 30:
-                        case 57419:
-                            cursor.moveLeft();
-                            break;
-                        case 31:
-                        case 57424:
-                            cursor.moveDown();
-                            break;
-                        case 32:
-                        case 57421:
-                            cursor.moveRight();
-                            break;
-                        case 28:
-                            openCellAtCursor();
-                            break;
-                        case 14:
-                            mark();
-                            break;
-                    }
-                    renderer.renderFrame();
-                    displayFrame();
-                }
-            });
-        } catch (NativeHookException ex) {
-            System.err.println("There was a problem registering the native hook.");
-            System.err.println(ex.getMessage());
-            exit(1);
+    public Cursor getCursor() {
+        if(started){
+            return cursor;
+        }
+        return new Cursor(1,1);
+    }
+
+
+    void openCellAtCursor(){
+        if (started){
+            int x = cursor.getX();
+            int y = cursor.getY();
+            openCell(x,y);
         }
     }
-    private void openCellAtCursor(){
-        int x = cursor.getX();
-        int y = cursor.getY();
-        openCell(x,y);
-    }
-    private void mark(){
-        int x = cursor.getX();
-        int y = cursor.getY();
-        Cell cell = matrix.getCell(x,y);
+    void mark(){
+        if(started){
+            int x = cursor.getX();
+            int y = cursor.getY();
+            Cell cell = matrix.getCell(x,y);
             if(!cell.isVisible()){
                 if(cell.isFlagged()){
                     cell.setFlagged(false);
@@ -158,7 +128,9 @@ public class Game {
 
             }
 
-        checkWin();
+            checkWin();
+
+        }
     }
     private void openCell(int x, int y){
         Cell c;
@@ -188,6 +160,7 @@ public class Game {
     private void lose(){
         //show lose screen
         clearScreen();
+        KeyListener.setRunning(false);
         System.out.println("                                                                                                                                           \n" +
                 "                                                                                                                                           \n" +
                 "YYYYYYY       YYYYYYY                                     LLLLLLLLLLL                                                        tttt          \n" +
@@ -214,32 +187,33 @@ public class Game {
                 "                                                                                                                                           \n" +
                 "                                                                                                                                           "
         );
+        System.out.println("Press Enter to continue");
+        String s = new Scanner(System.in).nextLine();
         showQuestion();
     }
     public void displayFrame(){
-        clearScreen();
-        System.out.println(renderer.renderFrame());
+        if (started){
+            clearScreen();
+            System.out.println(renderer.renderFrame());
+        }
     }
     public void clearScreen(){
         ScreenCleaner.clearConsole();
     }
     private void showQuestion() {
-        try {
-            Thread.sleep(100);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
+        clearScreen();
 
         Scanner scanner = new Scanner(System.in);
         System.out.println("Enter r to restart, m for the main menu or q to quit");
-        String input = scanner.nextLine().toUpperCase();  // Read user input
+        String input = scanner.nextLine().toUpperCase();
+        // Read user input
                             if (input.equals("M")) {
-                                //will be implemented
+                                Menu.chooseOption();
                             }
-                            if (input.equals("R")) {
-
+                            else if (input.equals("R")) {
+                                Menu.restartGame(height,width, amountOfBombs);
                             }
-                            if (input.equals("Q")) {
+                            else if (input.equals("Q")) {
                                 stopKeyListener();
                                 exit(0);
 

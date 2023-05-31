@@ -6,10 +6,11 @@ public class ScreenCleaner {
             if (os.contains("Windows")) {
                 new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
             } else {
-                Runtime.getRuntime().exec("clear");
+                System.out.print("\033[H\033[2J");
             }
         } catch (final Exception e) {
             // Handle any exceptions
+            System.err.println(e.getMessage());
         }
     }
 }
