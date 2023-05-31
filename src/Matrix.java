@@ -103,23 +103,21 @@ public class Matrix {
         return new Cell();
     }
     public boolean isValidX(int x){
-        if(x<0){
-            return false;
-        }
-        if(x>=width){
-            return false;
-        }
-        return true;
+        return isBetween(x, 0, width);
     }
     public boolean isValidY(int y){
-        if(y<0){
+        return isBetween(y,0, height);
+    }
+    private boolean isBetween(int number,int min, int max){
+        if(number<min){
             return false;
         }
-        if(y>=height){
+        if(number>=max){
             return false;
         }
         return true;
     }
+
     public int getHeight() {
         return height;
     }
